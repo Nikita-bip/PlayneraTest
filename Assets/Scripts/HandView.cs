@@ -15,12 +15,11 @@ public class HandView : MonoBehaviour
 
     [Header("Tool Visuals")]
     [SerializeField] private GameObject creamVisual;
+
     [SerializeField] private GameObject brushVisual;
     [SerializeField] private Image brushTip;
 
-    [SerializeField] private GameObject lipstickVisual;
-    [SerializeField] private Image lipstickVisualImage;
-    [SerializeField] private Image lipstickHead;
+    [SerializeField] private Image heldLipstickImage;
 
     [SerializeField] private GameObject blushVisual;
     [SerializeField] private Image blushPreview;
@@ -49,11 +48,6 @@ public class HandView : MonoBehaviour
 
         _isPlayerControl = false;
         handRoot.anchoredPosition = anchoredPosition;
-    }
-
-    public void SetBlushPreviewColor(Color color)
-    {
-        SetImageColor(blushPreview, color);
     }
 
     public void BeginPlayerControl(Vector2 startTarget)
@@ -91,18 +85,13 @@ public class HandView : MonoBehaviour
                 break;
 
             case MakeupToolType.Lipstick:
-                if (lipstickVisual != null)
-                    lipstickVisual.SetActive(true);
+                if (heldLipstickImage != null)
+                {
+                    if (heldToolSprite != null)
+                        heldLipstickImage.sprite = heldToolSprite;
 
-                if (lipstickVisualImage != null && heldToolSprite != null)
-                    lipstickVisualImage.sprite = heldToolSprite;
-
-                if (lipstickHead != null)
-                    lipstickHead.gameObject.SetActive(heldToolSprite == null);
-
-                if (heldToolSprite == null)
-                    SetImageColor(lipstickHead, previewColor);
-
+                    heldLipstickImage.gameObject.SetActive(true);
+                }
                 break;
 
             case MakeupToolType.Blush:
@@ -119,12 +108,14 @@ public class HandView : MonoBehaviour
         SetImageColor(brushTip, color);
     }
 
+    public void SetBlushPreviewColor(Color color)
+    {
+        SetImageColor(blushPreview, color);
+    }
+
     public void ClearTool()
     {
         HideAll();
-
-        if (lipstickHead != null)
-            lipstickHead.gameObject.SetActive(true);
     }
 
     public IEnumerator MoveTo(Vector2 targetAnchoredPos, float duration, float? targetZ = null)
@@ -190,6 +181,7 @@ public class HandView : MonoBehaviour
 
         bool toolInside = false;
         RectTransform toolPoint = GetToolContactPoint(toolType);
+
         if (toolPoint != null)
         {
             Vector2 toolScreen = RectTransformUtility.WorldToScreenPoint(uiCamera, toolPoint.position);
@@ -243,7 +235,7 @@ public class HandView : MonoBehaviour
     {
         if (creamVisual != null) creamVisual.SetActive(false);
         if (brushVisual != null) brushVisual.SetActive(false);
-        if (lipstickVisual != null) lipstickVisual.SetActive(false);
+        if (heldLipstickImage != null) heldLipstickImage.gameObject.SetActive(false);
         if (blushVisual != null) blushVisual.SetActive(false);
     }
 

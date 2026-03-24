@@ -28,6 +28,7 @@ public class MakeupGameController : MonoBehaviour
     [SerializeField] private RectTransform creamHoldPoint;
     [SerializeField] private RectTransform chestHoldPoint;
     [SerializeField] private RectTransform brushPickupPoint;
+    [SerializeField] private RectTransform blushPickupPoint;
 
     [Header("Apply Points")]
     [SerializeField] private RectTransform creamFacePoint;
@@ -46,6 +47,12 @@ public class MakeupGameController : MonoBehaviour
     [SerializeField] private float applyStepDuration = 0.08f;
     [SerializeField] private float shortPause = 0.04f;
 
+    [Header("Cream Polish")]
+    [SerializeField] private float creamApproachDuration = 0.10f;
+    [SerializeField] private float creamStrokeDuration = 0.09f;
+    [SerializeField] private float creamFinishPause = 0.06f;
+    [SerializeField] private float creamApplyZ = -12f;
+
     [Header("Rotations")]
     [SerializeField] private float defaultZ = 0f;
     [SerializeField] private float creamHoldZ = -10f;
@@ -53,12 +60,6 @@ public class MakeupGameController : MonoBehaviour
     [SerializeField] private float brushApplyZ = -8f;
     [SerializeField] private float lipstickApplyZ = -15f;
     [SerializeField] private float blushApplyZ = -10f;
-
-    [Header("Cream Polish")]
-    [SerializeField] private float creamApproachDuration = 0.10f;
-    [SerializeField] private float creamStrokeDuration = 0.09f;
-    [SerializeField] private float creamFinishPause = 0.06f;
-    [SerializeField] private float creamApplyZ = -12f;
 
     private GameState _state = GameState.Idle;
     private Coroutine _flowRoutine;
@@ -68,6 +69,7 @@ public class MakeupGameController : MonoBehaviour
     private Color _activePreviewColor = Color.white;
     private Sprite _activeHeldToolSprite;
     private RectTransform _activeSourcePoint;
+    private GameObject _activeSourceVisual;
 
     private Camera UICamera =>
         canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
@@ -83,34 +85,12 @@ public class MakeupGameController : MonoBehaviour
             hand.ClearTool();
     }
 
-    private RectTransform GetDropZoneForCurrentTool()
-    {
-        switch (_activeTool)
-        {
-            case MakeupToolType.Lipstick:
-                return lipsZone != null ? lipsZone : faceZone;
-
-            default:
-                return faceZone;
-        }
-    }
-
-    private IEnumerator MoveToolPointTo(MakeupToolType toolType, Vector2 targetLocalPoint, float duration, float z)
-    {
-        Vector2 handTarget = hand.GetTargetHandPositionForToolPoint(
-            movementArea,
-            UICamera,
-            toolType,
-            targetLocalPoint);
-
-        yield return hand.MoveTo(handTarget, duration, z);
-    }
-
     public void TryStartTool(
         MakeupToolType tool,
         int variantIndex,
         Color previewColor,
         Sprite heldToolSprite,
+        GameObject sourceVisualToHide,
         RectTransform sourcePoint)
     {
         if (_state != GameState.Idle)
@@ -125,19 +105,34 @@ public class MakeupGameController : MonoBehaviour
         switch (tool)
         {
             case MakeupToolType.Cream:
-                _flowRoutine = StartCoroutine(BeginCreamRoutine(sourcePoint));
+                _flowRoutine = StartCoroutine(BeginCreamRoutine(sourcePoint, sourceVisualToHide));
                 break;
 
             case MakeupToolType.Eyeshadow:
-                _flowRoutine = StartCoroutine(BeginEyeshadowRoutine(variantIndex, previewColor, heldToolSprite, sourcePoint));
+                _flowRoutine = StartCoroutine(BeginEyeshadowRoutine(
+                    variantIndex,
+                    previewColor,
+                    heldToolSprite,
+                    sourceVisualToHide,
+                    sourcePoint));
                 break;
 
             case MakeupToolType.Lipstick:
-                _flowRoutine = StartCoroutine(BeginLipstickRoutine(variantIndex, previewColor, heldToolSprite, sourcePoint));
+                _flowRoutine = StartCoroutine(BeginLipstickRoutine(
+                    variantIndex,
+                    previewColor,
+                    heldToolSprite,
+                    sourceVisualToHide,
+                    sourcePoint));
                 break;
 
             case MakeupToolType.Blush:
-                _flowRoutine = StartCoroutine(BeginBlushRoutine(variantIndex, previewColor, heldToolSprite, sourcePoint));
+                _flowRoutine = StartCoroutine(BeginBlushRoutine(
+                    variantIndex,
+                    previewColor,
+                    heldToolSprite,
+                    sourceVisualToHide,
+                    sourcePoint));
                 break;
         }
     }
@@ -154,6 +149,8 @@ public class MakeupGameController : MonoBehaviour
             StopCoroutine(_flowRoutine);
             _flowRoutine = null;
         }
+
+        SetActiveSourceVisual(true);
 
         hand.EndPlayerControl();
         hand.ClearTool();
@@ -196,7 +193,6 @@ public class MakeupGameController : MonoBehaviour
             droppedOnValidZone =
                 hand != null && hand.IsToolOrHandOverZone(dropZone, UICamera, _activeTool);
 
-            // запасной вариант: если курсор тоже попал в нужную зону — тоже засчитываем
             if (!droppedOnValidZone)
                 droppedOnValidZone = RectTransformUtility.RectangleContainsScreenPoint(dropZone, eventData.position, UICamera);
         }
@@ -214,17 +210,25 @@ public class MakeupGameController : MonoBehaviour
         _flowRoutine = StartCoroutine(ApplyCurrentToolRoutine());
     }
 
-    private IEnumerator BeginCreamRoutine(RectTransform creamPoint)
+    private IEnumerator BeginCreamRoutine(RectTransform creamPoint, GameObject sourceVisualToHide)
     {
         _state = GameState.AutoMove;
         _activeTool = MakeupToolType.Cream;
         _activeVariantIndex = -1;
         _activePreviewColor = Color.white;
+        _activeHeldToolSprite = null;
         _activeSourcePoint = creamPoint;
+        _activeSourceVisual = sourceVisualToHide;
 
-        hand.ShowTool(MakeupToolType.Cream, Color.white);
+        hand.ClearTool();
 
+        // Рука подходит к крему пустой
         yield return hand.MoveTo(ToLocalPoint(creamPoint), pickDuration, defaultZ);
+
+        // "Берёт" крем
+        SetActiveSourceVisual(false);
+        hand.ShowTool(MakeupToolType.Cream, Color.white, null);
+
         yield return new WaitForSecondsRealtime(shortPause);
         yield return hand.MoveTo(ToLocalPoint(creamHoldPoint), moveDuration, creamHoldZ);
 
@@ -232,7 +236,12 @@ public class MakeupGameController : MonoBehaviour
         hand.BeginPlayerControl(hand.CurrentPosition);
     }
 
-    private IEnumerator BeginEyeshadowRoutine(int variantIndex, Color previewColor, Sprite heldToolSprite, RectTransform palettePoint)
+    private IEnumerator BeginEyeshadowRoutine(
+        int variantIndex,
+        Color previewColor,
+        Sprite heldToolSprite,
+        GameObject sourceVisualToHide,
+        RectTransform palettePoint)
     {
         _state = GameState.AutoMove;
         _activeTool = MakeupToolType.Eyeshadow;
@@ -240,14 +249,20 @@ public class MakeupGameController : MonoBehaviour
         _activePreviewColor = previewColor;
         _activeHeldToolSprite = heldToolSprite;
         _activeSourcePoint = brushPickupPoint;
+        _activeSourceVisual = sourceVisualToHide;
 
+        hand.ClearTool();
+
+        // Рука подходит к кисточке пустой
+        yield return hand.MoveTo(ToLocalPoint(brushPickupPoint), pickDuration, defaultZ);
+
+        // "Берёт" кисточку, кисточка исчезает из книги
+        SetActiveSourceVisual(false);
         hand.ShowTool(MakeupToolType.Eyeshadow, Color.white, heldToolSprite);
 
-        // Сначала рука берёт кисточку
-        yield return hand.MoveTo(ToLocalPoint(brushPickupPoint), pickDuration, defaultZ);
         yield return new WaitForSecondsRealtime(shortPause);
 
-        // Потом именно кончик кисточки касается выбранного цвета
+        // Кончик кисточки касается цвета
         yield return MoveToolPointTo(
             MakeupToolType.Eyeshadow,
             ToLocalPoint(palettePoint),
@@ -257,14 +272,19 @@ public class MakeupGameController : MonoBehaviour
         hand.SetBrushTipColor(previewColor);
         yield return new WaitForSecondsRealtime(shortPause);
 
-        // Потом рука фиксируется на уровне груди
+        // Рука уходит в точку ожидания
         yield return hand.MoveTo(ToLocalPoint(chestHoldPoint), moveDuration, chestHoldZ);
 
         _state = GameState.Dragging;
         hand.BeginPlayerControl(hand.CurrentPosition);
     }
 
-    private IEnumerator BeginLipstickRoutine(int variantIndex, Color previewColor, Sprite heldToolSprite, RectTransform lipstickPoint)
+    private IEnumerator BeginLipstickRoutine(
+        int variantIndex,
+        Color previewColor,
+        Sprite heldToolSprite,
+        GameObject sourceVisualToHide,
+        RectTransform lipstickPoint)
     {
         _state = GameState.AutoMove;
         _activeTool = MakeupToolType.Lipstick;
@@ -272,10 +292,17 @@ public class MakeupGameController : MonoBehaviour
         _activePreviewColor = previewColor;
         _activeHeldToolSprite = heldToolSprite;
         _activeSourcePoint = lipstickPoint;
+        _activeSourceVisual = sourceVisualToHide;
 
+        hand.ClearTool();
+
+        // Рука подходит к выбранной помаде пустой
+        yield return hand.MoveTo(ToLocalPoint(lipstickPoint), pickDuration, defaultZ);
+
+        // "Берёт" выбранную помаду
+        SetActiveSourceVisual(false);
         hand.ShowTool(MakeupToolType.Lipstick, previewColor, heldToolSprite);
 
-        yield return hand.MoveTo(ToLocalPoint(lipstickPoint), pickDuration, defaultZ);
         yield return new WaitForSecondsRealtime(shortPause);
         yield return hand.MoveTo(ToLocalPoint(chestHoldPoint), moveDuration, chestHoldZ);
 
@@ -283,30 +310,43 @@ public class MakeupGameController : MonoBehaviour
         hand.BeginPlayerControl(hand.CurrentPosition);
     }
 
-    private IEnumerator BeginBlushRoutine(int variantIndex, Color previewColor, Sprite heldToolSprite, RectTransform blushPoint)
+    private IEnumerator BeginBlushRoutine(
+        int variantIndex,
+        Color previewColor,
+        Sprite heldToolSprite,
+        GameObject sourceVisualToHide,
+        RectTransform blushColorPoint)
     {
         _state = GameState.AutoMove;
         _activeTool = MakeupToolType.Blush;
         _activeVariantIndex = variantIndex;
         _activePreviewColor = previewColor;
         _activeHeldToolSprite = heldToolSprite;
-        _activeSourcePoint = blushPoint;
+        _activeSourcePoint = blushPickupPoint;
+        _activeSourceVisual = sourceVisualToHide;
 
-        // Сначала показываем кисть без нанесённого цвета
+        hand.ClearTool();
+
+        // Рука подходит к кисти для румян пустой
+        yield return hand.MoveTo(ToLocalPoint(blushPickupPoint), pickDuration, defaultZ);
+
+        // "Берёт" кисть
+        SetActiveSourceVisual(false);
         hand.ShowTool(MakeupToolType.Blush, Color.white, heldToolSprite);
 
-        // Кисть подходит к выбранному цвету так, чтобы именно кончик коснулся его
+        yield return new WaitForSecondsRealtime(shortPause);
+
+        // Кончик кисти касается выбранного цвета
         yield return MoveToolPointTo(
             MakeupToolType.Blush,
-            ToLocalPoint(blushPoint),
-            pickDuration,
+            ToLocalPoint(blushColorPoint),
+            moveDuration,
             defaultZ);
 
-        // После касания цвет "набирается" на кисть
         hand.SetBlushPreviewColor(previewColor);
         yield return new WaitForSecondsRealtime(shortPause);
 
-        // Потом рука фиксируется на уровне груди
+        // Рука уходит в точку ожидания
         yield return hand.MoveTo(ToLocalPoint(chestHoldPoint), moveDuration, chestHoldZ);
 
         _state = GameState.Dragging;
@@ -348,17 +388,13 @@ public class MakeupGameController : MonoBehaviour
         Vector2 leftCheek = ToLocalPoint(leftCheekPoint);
         Vector2 rightCheek = ToLocalPoint(rightCheekPoint);
 
-        // Плавно подводим руку из текущей dragged-позиции к первой точке нанесения
         yield return hand.MoveTo(leftCheek + new Vector2(-10f, 6f), creamApproachDuration, creamApplyZ);
-
-        // Имитация нанесения крема по лицу
         yield return hand.MoveTo(leftCheek + new Vector2(10f, -4f), creamStrokeDuration, creamApplyZ);
         yield return hand.MoveTo(forehead + new Vector2(0f, 8f), creamStrokeDuration, creamApplyZ);
         yield return hand.MoveTo(rightCheek + new Vector2(-10f, -4f), creamStrokeDuration, creamApplyZ);
         yield return hand.MoveTo(chin + new Vector2(0f, 4f), creamStrokeDuration, creamApplyZ);
         yield return hand.MoveTo(center, creamStrokeDuration, creamApplyZ);
 
-        // Убираем прыщи — с твоей системой это эквивалент "девочка без прыщей"
         character.SetCreamApplied(true);
 
         yield return new WaitForSecondsRealtime(creamFinishPause);
@@ -369,7 +405,6 @@ public class MakeupGameController : MonoBehaviour
         Vector2 left = ToLocalPoint(leftEyePoint);
         Vector2 right = ToLocalPoint(rightEyePoint);
 
-        // Быстрая анимация нанесения на левый глаз
         yield return MoveToolPointTo(
             MakeupToolType.Eyeshadow,
             left + new Vector2(-10f, 0f),
@@ -382,7 +417,6 @@ public class MakeupGameController : MonoBehaviour
             applyStepDuration,
             brushApplyZ);
 
-        // Быстрая анимация нанесения на правый глаз
         yield return MoveToolPointTo(
             MakeupToolType.Eyeshadow,
             right + new Vector2(-10f, 0f),
@@ -402,7 +436,6 @@ public class MakeupGameController : MonoBehaviour
     {
         Vector2 lips = ToLocalPoint(lipsPoint);
 
-        // Быстрое нанесение слева направо по губам именно кончиком помады
         yield return MoveToolPointTo(
             MakeupToolType.Lipstick,
             lips + new Vector2(-14f, 0f),
@@ -429,7 +462,6 @@ public class MakeupGameController : MonoBehaviour
         Vector2 left = ToLocalPoint(leftCheekPoint);
         Vector2 right = ToLocalPoint(rightCheekPoint);
 
-        // Быстрое нанесение на левую щёку
         yield return MoveToolPointTo(
             MakeupToolType.Blush,
             left + new Vector2(-8f, 8f),
@@ -442,7 +474,6 @@ public class MakeupGameController : MonoBehaviour
             applyStepDuration,
             blushApplyZ);
 
-        // Быстрое нанесение на правую щёку
         yield return MoveToolPointTo(
             MakeupToolType.Blush,
             right + new Vector2(-8f, 8f),
@@ -462,12 +493,13 @@ public class MakeupGameController : MonoBehaviour
     {
         _state = GameState.Returning;
 
-        RectTransform returnPoint = _activeTool == MakeupToolType.Eyeshadow
-            ? brushPickupPoint
-            : _activeSourcePoint;
+        RectTransform returnPoint = GetReturnPointForCurrentTool();
 
         if (returnPoint != null)
             yield return hand.MoveTo(ToLocalPoint(returnPoint), moveDuration, defaultZ);
+
+        // Возвращаем предмет в источник
+        SetActiveSourceVisual(true);
 
         hand.ClearTool();
 
@@ -479,6 +511,50 @@ public class MakeupGameController : MonoBehaviour
         _flowRoutine = null;
     }
 
+    private IEnumerator MoveToolPointTo(MakeupToolType toolType, Vector2 targetLocalPoint, float duration, float z)
+    {
+        Vector2 handTarget = hand.GetTargetHandPositionForToolPoint(
+            movementArea,
+            UICamera,
+            toolType,
+            targetLocalPoint);
+
+        yield return hand.MoveTo(handTarget, duration, z);
+    }
+
+    private RectTransform GetDropZoneForCurrentTool()
+    {
+        switch (_activeTool)
+        {
+            case MakeupToolType.Lipstick:
+                return lipsZone != null ? lipsZone : faceZone;
+
+            default:
+                return faceZone;
+        }
+    }
+
+    private RectTransform GetReturnPointForCurrentTool()
+    {
+        switch (_activeTool)
+        {
+            case MakeupToolType.Eyeshadow:
+                return brushPickupPoint;
+
+            case MakeupToolType.Blush:
+                return blushPickupPoint;
+
+            default:
+                return _activeSourcePoint;
+        }
+    }
+
+    private void SetActiveSourceVisual(bool visible)
+    {
+        if (_activeSourceVisual != null)
+            _activeSourceVisual.SetActive(visible);
+    }
+
     private void ResetActiveTool()
     {
         _activeTool = MakeupToolType.None;
@@ -486,6 +562,7 @@ public class MakeupGameController : MonoBehaviour
         _activePreviewColor = Color.white;
         _activeHeldToolSprite = null;
         _activeSourcePoint = null;
+        _activeSourceVisual = null;
     }
 
     private void UpdateDragPosition(Vector2 screenPosition)

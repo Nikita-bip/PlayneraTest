@@ -9,6 +9,7 @@ public class MakeupToolButton : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Color previewColor = Color.white;
     [SerializeField] private RectTransform clickPointOverride;
     [SerializeField] private Sprite heldToolSprite;
+    [SerializeField] private GameObject sourceVisualToHide;
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -19,6 +20,12 @@ public class MakeupToolButton : MonoBehaviour, IPointerClickHandler
             ? clickPointOverride
             : transform as RectTransform;
 
-        controller.TryStartTool(toolType, variantIndex, previewColor, heldToolSprite, clickPoint);
+        controller.TryStartTool(
+            toolType,
+            variantIndex,
+            previewColor,
+            heldToolSprite,
+            sourceVisualToHide,
+            clickPoint);
     }
 }

@@ -251,6 +251,7 @@ MonoBehaviour:
   previewColor: {r: 0.73333335, g: 0.25490198, b: 0.7411765, a: 1}
   clickPointOverride: {fileID: 77184548}
   heldToolSprite: {fileID: 21300000, guid: cb57f64b6b282714382f343f3009401a, type: 3}
+  sourceVisualToHide: {fileID: 77184547}
 --- !u!1 &78473207
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,7 +344,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &113651453
 RectTransform:
   m_ObjectHideFlags: 0
@@ -676,6 +677,7 @@ MonoBehaviour:
   previewColor: {r: 0.69803923, g: 0.7254902, b: 1, a: 1}
   clickPointOverride: {fileID: 173312558}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 288869731}
 --- !u!1 &213747717
 GameObject:
   m_ObjectHideFlags: 0
@@ -770,6 +772,7 @@ MonoBehaviour:
   previewColor: {r: 0.9803922, g: 0.69803923, b: 0.5254902, a: 1}
   clickPointOverride: {fileID: 213747718}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 2032933797}
 --- !u!1 &239033895
 GameObject:
   m_ObjectHideFlags: 0
@@ -802,10 +805,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1266682897}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0.000030517578, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &239033897
 MonoBehaviour:
@@ -1427,9 +1430,7 @@ MonoBehaviour:
   creamVisual: {fileID: 113651452}
   brushVisual: {fileID: 1785750916}
   brushTip: {fileID: 866953335}
-  lipstickVisual: {fileID: 1266682896}
-  lipstickVisualImage: {fileID: 1266682898}
-  lipstickHead: {fileID: 1289447344}
+  heldLipstickImage: {fileID: 1266682898}
   blushVisual: {fileID: 1635192410}
   blushPreview: {fileID: 538642942}
   dragSmooth: 20
@@ -1527,6 +1528,7 @@ MonoBehaviour:
   previewColor: {r: 1, g: 0.15686275, b: 0.3254902, a: 1}
   clickPointOverride: {fileID: 484731636}
   heldToolSprite: {fileID: 21300000, guid: 3057a9862270f4b41b4eb293dc71bd37, type: 3}
+  sourceVisualToHide: {fileID: 484731635}
 --- !u!1 &487261266
 GameObject:
   m_ObjectHideFlags: 0
@@ -1559,7 +1561,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -229.13, y: 22}
+  m_AnchoredPosition: {x: -127.79, y: -76}
   m_SizeDelta: {x: 255.585, y: 242.92}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &519420028
@@ -1823,6 +1825,7 @@ MonoBehaviour:
   previewColor: {r: 1, g: 0.69803923, b: 0.8117648, a: 1}
   clickPointOverride: {fileID: 560030791}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 2032933797}
 --- !u!1 &576316915
 GameObject:
   m_ObjectHideFlags: 0
@@ -1917,6 +1920,7 @@ MonoBehaviour:
   previewColor: {r: 0.97647065, g: 0.7686275, b: 0.8117648, a: 1}
   clickPointOverride: {fileID: 576316916}
   heldToolSprite: {fileID: 21300000, guid: d5f4bbd3a1fd95c4ca6cf092ae71fd0f, type: 3}
+  sourceVisualToHide: {fileID: 576316915}
 --- !u!1 &605692220
 GameObject:
   m_ObjectHideFlags: 0
@@ -2011,6 +2015,7 @@ MonoBehaviour:
   previewColor: {r: 0.19215688, g: 0.03137255, b: 0.10196079, a: 1}
   clickPointOverride: {fileID: 605692221}
   heldToolSprite: {fileID: 21300000, guid: 80aa9e6e56f474e4e99591799de25df3, type: 3}
+  sourceVisualToHide: {fileID: 605692220}
 --- !u!1 &689874495
 GameObject:
   m_ObjectHideFlags: 0
@@ -2250,6 +2255,7 @@ MonoBehaviour:
   previewColor: {r: 0.9215687, g: 0.5764706, b: 0.5411765, a: 1}
   clickPointOverride: {fileID: 718202733}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 2032933797}
 --- !u!1 &733056439
 GameObject:
   m_ObjectHideFlags: 0
@@ -2344,6 +2350,7 @@ MonoBehaviour:
   previewColor: {r: 1, g: 0.7607844, b: 0.69803923, a: 1}
   clickPointOverride: {fileID: 733056440}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 2032933797}
 --- !u!1 &751426491
 GameObject:
   m_ObjectHideFlags: 0
@@ -2881,6 +2888,7 @@ MonoBehaviour:
   previewColor: {r: 0.87843144, g: 0.6, b: 0.41176474, a: 1}
   clickPointOverride: {fileID: 863806027}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 288869731}
 --- !u!1 &866953333
 GameObject:
   m_ObjectHideFlags: 0
@@ -3050,6 +3058,42 @@ MonoBehaviour:
   previewColor: {r: 0.95294124, g: 0.5294118, b: 0.7686275, a: 1}
   clickPointOverride: {fileID: 883760907}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 288869731}
+--- !u!1 &885426624
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 885426625}
+  m_Layer: 5
+  m_Name: BlushPickupPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &885426625
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885426624}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1697015543}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 226.736, y: -309.354}
+  m_SizeDelta: {x: 349.472, y: 558.707}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &902020328
 GameObject:
   m_ObjectHideFlags: 0
@@ -3144,6 +3188,7 @@ MonoBehaviour:
   previewColor: {r: 0.87843144, g: 0.6313726, b: 0.4666667, a: 1}
   clickPointOverride: {fileID: 902020329}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 2032933797}
 --- !u!1 &926235452
 GameObject:
   m_ObjectHideFlags: 0
@@ -3238,6 +3283,7 @@ MonoBehaviour:
   previewColor: {r: 0.9490197, g: 0.6901961, b: 0.89019614, a: 1}
   clickPointOverride: {fileID: 926235453}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 2032933797}
 --- !u!1 &926802300
 GameObject:
   m_ObjectHideFlags: 0
@@ -3417,6 +3463,7 @@ MonoBehaviour:
   previewColor: {r: 1, g: 1, b: 1, a: 1}
   clickPointOverride: {fileID: 936467430}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 936467429}
 --- !u!1 &939992267
 GameObject:
   m_ObjectHideFlags: 0
@@ -3859,6 +3906,7 @@ MonoBehaviour:
   previewColor: {r: 0.9607844, g: 0.427451, b: 0.32156864, a: 1}
   clickPointOverride: {fileID: 1069288248}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 288869731}
 --- !u!1 &1105833314
 GameObject:
   m_ObjectHideFlags: 0
@@ -4478,6 +4526,7 @@ MonoBehaviour:
   previewColor: {r: 0.9803922, g: 0.82745105, b: 0.34901962, a: 1}
   clickPointOverride: {fileID: 1245295696}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 288869731}
 --- !u!1 &1247002512
 GameObject:
   m_ObjectHideFlags: 0
@@ -4572,6 +4621,7 @@ MonoBehaviour:
   previewColor: {r: 1, g: 0.5882353, b: 0.5882353, a: 1}
   clickPointOverride: {fileID: 1247002513}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 2032933797}
 --- !u!1 &1266682896
 GameObject:
   m_ObjectHideFlags: 0
@@ -4589,7 +4639,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1266682897
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4608,7 +4658,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -192.48474, y: 187.23163}
+  m_AnchoredPosition: {x: -146, y: 134}
   m_SizeDelta: {x: 69.6, y: 207.42}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1266682898
@@ -5034,7 +5084,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 382, y: -512}
+  m_AnchoredPosition: {x: 806.82, y: -995}
   m_SizeDelta: {x: 281.968, y: 327.46}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1525555375
@@ -5398,7 +5448,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1635192411
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5529,6 +5579,7 @@ RectTransform:
   - {fileID: 487261267}
   - {fileID: 1024292236}
   - {fileID: 396527747}
+  - {fileID: 885426625}
   - {fileID: 1903963935}
   - {fileID: 703799088}
   - {fileID: 1570802992}
@@ -5639,6 +5690,7 @@ MonoBehaviour:
   previewColor: {r: 1, g: 0.15686275, b: 0.52156866, a: 1}
   clickPointOverride: {fileID: 1770169663}
   heldToolSprite: {fileID: 21300000, guid: 99cb4a6ad81e8c64b8a08d460e4132ea, type: 3}
+  sourceVisualToHide: {fileID: 1770169662}
 --- !u!1 &1785750916
 GameObject:
   m_ObjectHideFlags: 0
@@ -5656,7 +5708,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1785750917
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5920,6 +5972,7 @@ MonoBehaviour:
   previewColor: {r: 0.5411765, g: 0.9215687, b: 0.7490196, a: 1}
   clickPointOverride: {fileID: 1809494959}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 288869731}
 --- !u!1 &1823175581
 GameObject:
   m_ObjectHideFlags: 0
@@ -6089,6 +6142,7 @@ MonoBehaviour:
   previewColor: {r: 0.48627454, g: 0.8196079, b: 0.9960785, a: 1}
   clickPointOverride: {fileID: 1824975191}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 288869731}
 --- !u!1 &1834645963
 GameObject:
   m_ObjectHideFlags: 0
@@ -6426,6 +6480,7 @@ MonoBehaviour:
   previewColor: {r: 0.68235296, g: 0.33333334, b: 0.45098042, a: 1}
   clickPointOverride: {fileID: 1845805354}
   heldToolSprite: {fileID: 21300000, guid: 6ef5f987cb419cf4d861364f50bc1d30, type: 3}
+  sourceVisualToHide: {fileID: 1845805353}
 --- !u!1 &1853776963
 GameObject:
   m_ObjectHideFlags: 0
@@ -6682,6 +6737,7 @@ MonoBehaviour:
   previewColor: {r: 0.9607844, g: 0.69803923, b: 1, a: 1}
   clickPointOverride: {fileID: 1878707345}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 288869731}
 --- !u!1 &1880830368
 GameObject:
   m_ObjectHideFlags: 0
@@ -7210,6 +7266,7 @@ MonoBehaviour:
   previewColor: {r: 0.98823535, g: 0.53333336, b: 0.44705886, a: 1}
   clickPointOverride: {fileID: 1963023832}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 2032933797}
 --- !u!1 &1981409834
 GameObject:
   m_ObjectHideFlags: 0
@@ -7304,6 +7361,7 @@ MonoBehaviour:
   previewColor: {r: 0.95294124, g: 0.5294118, b: 0.6392157, a: 1}
   clickPointOverride: {fileID: 1981409835}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 2032933797}
 --- !u!1 &2032933797
 GameObject:
   m_ObjectHideFlags: 0
@@ -7474,6 +7532,7 @@ MonoBehaviour:
   previewColor: {r: 1, g: 0.69803923, b: 0.69803923, a: 1}
   clickPointOverride: {fileID: 2041059112}
   heldToolSprite: {fileID: 0}
+  sourceVisualToHide: {fileID: 288869731}
 --- !u!1 &2097109147
 GameObject:
   m_ObjectHideFlags: 0
@@ -7604,6 +7663,7 @@ MonoBehaviour:
   creamHoldPoint: {fileID: 487261267}
   chestHoldPoint: {fileID: 1024292236}
   brushPickupPoint: {fileID: 396527747}
+  blushPickupPoint: {fileID: 885426625}
   creamFacePoint: {fileID: 1903963935}
   creamForeheadPoint: {fileID: 703799088}
   creamChinPoint: {fileID: 1570802992}
@@ -7616,16 +7676,16 @@ MonoBehaviour:
   moveDuration: 0.22
   applyStepDuration: 0.08
   shortPause: 0.04
+  creamApproachDuration: 0.6
+  creamStrokeDuration: 0.6
+  creamFinishPause: 0.06
+  creamApplyZ: -12
   defaultZ: 0
   creamHoldZ: -10
   chestHoldZ: 0
   brushApplyZ: -8
   lipstickApplyZ: -15
   blushApplyZ: -10
-  creamApproachDuration: 0.6
-  creamStrokeDuration: 0.6
-  creamFinishPause: 0.06
-  creamApplyZ: -12
 --- !u!1 &2141458428
 GameObject:
   m_ObjectHideFlags: 0
@@ -7712,7 +7772,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
